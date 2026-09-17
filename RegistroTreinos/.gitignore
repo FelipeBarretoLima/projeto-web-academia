@@ -31,3 +31,7 @@ build/
 
 ### VS Code ###
 .vscode/
+
+
+### BancoSQL ###
+src/main/resources/application.properties
