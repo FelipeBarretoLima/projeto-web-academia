@@ -17,4 +17,7 @@ public interface TreinoRepository extends JpaRepository<Treino, Long> {
 
     // Verifica se já existe um treino com esse usuário, data e nome de treino
     boolean existsByUsuarioAndDateAndNomeTreino(Usuario usuario, LocalDate date, String nomeTreino);
+
+    // Mesma verificação, mas ignorando um id específico (usado na edição, pra não comparar o registro com ele mesmo)
+    boolean existsByUsuarioAndDateAndNomeTreinoAndIdNot(Usuario usuario, LocalDate date, String nomeTreino, Long id);
 }
