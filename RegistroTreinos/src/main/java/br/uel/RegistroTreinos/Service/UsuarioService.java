@@ -30,4 +30,8 @@ public class UsuarioService {
         }
         return usuarioRepository.save(usuario);
     }
+
+    public List<Usuario> pesquisarPorNome(String nome) {
+        return usuarioRepository.findByNomeContainingIgnoreCase(nome);
+    }
 }
