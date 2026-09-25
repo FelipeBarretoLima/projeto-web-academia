@@ -20,4 +20,7 @@ public interface TreinoRepository extends JpaRepository<Treino, Long> {
 
     // Mesma verificação, mas ignorando um id específico (usado na edição, pra não comparar o registro com ele mesmo)
     boolean existsByUsuarioAndDateAndNomeTreinoAndIdNot(Usuario usuario, LocalDate date, String nomeTreino, Long id);
+
+    // Busca os treinos de um usuário específico, já ordenados conforme o Sort recebido
+    List<Treino> findByUsuarioId(Long usuarioId, Sort sort);
 }
