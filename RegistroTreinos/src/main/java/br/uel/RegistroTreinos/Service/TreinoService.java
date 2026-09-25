@@ -6,6 +6,7 @@ import br.uel.RegistroTreinos.Repository.ItemTreinoRepository;
 import br.uel.RegistroTreinos.Repository.TreinoRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Sort;
 
 import java.util.List;
 
@@ -91,5 +92,12 @@ public class TreinoService {
         if (treino.getNomeTreino() == null || treino.getNomeTreino().isBlank()) {
             throw new IllegalArgumentException("O nome do treino é obrigatório.");
         }
+    }
+    public List<Treino> listarPorUsuario(Long usuarioId, String direcao) {
+        Sort sort = "desc".equalsIgnoreCase(direcao)
+                ? Sort.by("date").descending()
+                : Sort.by("date").ascending();
+
+        return treinoRepository.findByUsuarioId(usuarioId, sort);
     }
 }
