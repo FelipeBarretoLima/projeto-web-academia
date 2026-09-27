@@ -23,4 +23,6 @@ public interface TreinoRepository extends JpaRepository<Treino, Long> {
 
     // Busca os treinos de um usuário específico, já ordenados conforme o Sort recebido
     List<Treino> findByUsuarioId(Long usuarioId, Sort sort);
+
+    boolean existsByUsuarioId(Long usuarioId);
 }
