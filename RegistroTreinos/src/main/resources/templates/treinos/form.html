@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head(titulo=${treino.id} == null ? 'Novo treino' : 'Editar treino')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+<div class="container">
+    <div th:replace="~{fragments/layout :: alertas}"></div>
+
+    <h1 class="h3 mb-1" th:text="${treino.id} == null ? 'Novo treino' : 'Editar treino'"></h1>
+    <p class="text-muted" th:text="'Usuário: ' + ${usuario.nome}"></p>
+
+    <form th:action="${treino.id} == null ? @{/usuarios/{usuarioId}/treinos(usuarioId=${usuario.id})} : @{/usuarios/{usuarioId}/treinos/{id}/editar(usuarioId=${usuario.id}, id=${treino.id})}"
+          th:object="${treino}" method="post" class="row g-3">
+        <div class="col-md-4">
+            <label class="form-label">Data *</label>
+            <input type="date" th:field="*{date}" class="form-control" required>
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Nome do treino *</label>
+            <input type="text" th:field="*{nomeTreino}" class="form-control" required maxlength="255" placeholder="Ex: Treino A - Peito e Tríceps">
+        </div>
+        <div class="col-12">
+            <button type="submit" class="btn btn-primary">Salvar</button>
+            <a th:href="@{/usuarios/{usuarioId}/treinos(usuarioId=${usuario.id})}" class="btn btn-outline-secondary">Cancelar</a>
+        </div>
+    </form>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
