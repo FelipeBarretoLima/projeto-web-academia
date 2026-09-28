@@ -1,10 +1,75 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head(titulo='Exercícios de ' + ${treino.nomeTreino})}"></head>
 <body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+<div class="container">
+    <div th:replace="~{fragments/layout :: alertas}"></div>
 
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a th:href="@{/usuarios}">Usuários</a></li>
+            <li class="breadcrumb-item">
+                <a th:href="@{/usuarios/{usuarioId}/treinos(usuarioId=${treino.usuario.id})}" th:text="${treino.usuario.nome}"></a>
+            </li>
+            <li class="breadcrumb-item active" th:text="${treino.nomeTreino}"></li>
+        </ol>
+    </nav>
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1 class="h3 mb-0" th:text="'Exercícios · ' + ${treino.nomeTreino}"></h1>
+        <a th:href="@{/treinos/{treinoId}/itens/novo(treinoId=${treino.id})}" class="btn btn-success">+ Novo exercício</a>
+    </div>
+
+    <form method="get" th:action="@{/treinos/{treinoId}/itens(treinoId=${treino.id})}" class="row g-2 mb-3">
+        <input type="hidden" name="direcao" th:value="${direcao}">
+        <div class="col-auto">
+            <input type="text" name="nomeExercicio" th:value="${nomeExercicio}" class="form-control" placeholder="Pesquisar por exercício">
+        </div>
+        <div class="col-auto">
+            <button type="submit" class="btn btn-primary">Pesquisar</button>
+        </div>
+        <div class="col-auto" th:if="${nomeExercicio != null and !nomeExercicio.isEmpty()}">
+            <a th:href="@{/treinos/{treinoId}/itens(treinoId=${treino.id})}" class="btn btn-outline-secondary">Limpar</a>
+        </div>
+    </form>
+
+    <table class="table table-striped table-hover align-middle">
+        <thead>
+        <tr>
+            <th>
+                <a class="text-decoration-none text-dark"
+                   th:href="@{/treinos/{treinoId}/itens(treinoId=${treino.id}, nomeExercicio=${nomeExercicio}, direcao=${direcao == 'asc' ? 'desc' : 'asc'})}">
+                    Exercício
+                    <span th:text="${direcao == 'asc' ? '▲' : '▼'}"></span>
+                </a>
+            </th>
+            <th>Carga (kg)</th>
+            <th>Repetições</th>
+            <th>Séries</th>
+            <th class="text-end">Ações</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="item : ${itens}">
+            <td th:text="${item.nomeExercicio}"></td>
+            <td th:text="${item.carga}"></td>
+            <td th:text="${item.repeticoes}"></td>
+            <td th:text="${item.totalSeries}"></td>
+            <td class="text-end">
+                <a th:href="@{/treinos/{treinoId}/itens/{id}/editar(treinoId=${treino.id}, id=${item.id})}" class="btn btn-sm btn-outline-secondary">Editar</a>
+                <form th:action="@{/treinos/{treinoId}/itens/{id}/excluir(treinoId=${treino.id}, id=${item.id})}" method="post" class="d-inline"
+                      onsubmit="return confirm('Excluir este exercício?');">
+                    <button type="submit" class="btn btn-sm btn-outline-danger">Excluir</button>
+                </form>
+            </td>
+        </tr>
+        <tr th:if="${itens.isEmpty()}">
+            <td colspan="5" class="text-center text-muted">Nenhum exercício encontrado.</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

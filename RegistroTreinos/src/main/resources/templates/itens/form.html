@@ -1,10 +1,38 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head(titulo=${item.id} == null ? 'Novo exercício' : 'Editar exercício')}"></head>
 <body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+<div class="container">
+    <div th:replace="~{fragments/layout :: alertas}"></div>
 
+    <h1 class="h3 mb-1" th:text="${item.id} == null ? 'Novo exercício' : 'Editar exercício'"></h1>
+    <p class="text-muted" th:text="'Treino: ' + ${treino.nomeTreino}"></p>
+
+    <form th:action="${item.id} == null ? @{/treinos/{treinoId}/itens(treinoId=${treino.id})} : @{/treinos/{treinoId}/itens/{id}/editar(treinoId=${treino.id}, id=${item.id})}"
+          th:object="${item}" method="post" class="row g-3">
+        <div class="col-md-6">
+            <label class="form-label">Nome do exercício *</label>
+            <input type="text" th:field="*{nomeExercicio}" class="form-control" required maxlength="255" placeholder="Ex: Supino reto">
+        </div>
+        <div class="col-md-2">
+            <label class="form-label">Carga (kg) *</label>
+            <input type="number" step="0.5" min="0.5" th:field="*{carga}" class="form-control" required>
+        </div>
+        <div class="col-md-2">
+            <label class="form-label">Repetições *</label>
+            <input type="number" step="1" min="1" th:field="*{repeticoes}" class="form-control" required>
+        </div>
+        <div class="col-md-2">
+            <label class="form-label">Séries *</label>
+            <input type="number" step="1" min="1" th:field="*{totalSeries}" class="form-control" required>
+        </div>
+        <div class="col-12">
+            <button type="submit" class="btn btn-primary">Salvar</button>
+            <a th:href="@{/treinos/{treinoId}/itens(treinoId=${treino.id})}" class="btn btn-outline-secondary">Cancelar</a>
+        </div>
+    </form>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
