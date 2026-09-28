@@ -63,9 +63,14 @@ public class ItemTreinoController {
     @PostMapping("/{id}/editar")
     public String atualizar(@PathVariable Long treinoId, @PathVariable Long id,
                             @ModelAttribute ItemTreino item, RedirectAttributes redirectAttributes) {
+
+        Treino treino = treinoService.buscarPorId(treinoId);
+        item.setTreino(treino);
+
         try {
             itemTreinoService.atualizar(id, item);
             redirectAttributes.addFlashAttribute("sucesso", "Exercício atualizado com sucesso!");
+            return "redirect:/treinos/" + treinoId + "/itens";
         } catch (IllegalArgumentException e) {
             redirectAttributes.addFlashAttribute("erro", e.getMessage());
         }
